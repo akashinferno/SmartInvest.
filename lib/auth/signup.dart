@@ -1,54 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:smart_invest_1/auth/signup.dart';
+import 'package:smart_invest_1/auth/login.dart';
 import 'package:smart_invest_1/utils/theme.dart'; // Import your existing theme
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpState extends State<SignUp> {
   final TextEditingController email = TextEditingController();
   final TextEditingController password = TextEditingController();
+  final TextEditingController confirmPassword = TextEditingController();
   String errorMessage = '';
   bool isLoading = false;
   bool isPasswordVisible = false;
+  bool isConfirmPasswordVisible = false;
 
-  Future<void> signIn() async {
-    // Validate inputs
-    if (email.text.trim().isEmpty || password.text.isEmpty) {
-      setState(() {
-        errorMessage = 'Email and password cannot be empty';
-      });
-      return;
-    }
-
+  Future<void> signUp() async {
     setState(() {
       errorMessage = '';
       isLoading = true;
     });
 
+    // Check if passwords match
+    if (password.text != confirmPassword.text) {
+      setState(() {
+        errorMessage = 'Passwords do not match';
+        isLoading = false;
+      });
+      return;
+    }
+
+    // Validate inputs
+    if (email.text.trim().isEmpty || password.text.isEmpty) {
+      setState(() {
+        errorMessage = 'Email and password cannot be empty';
+        isLoading = false;
+      });
+      return;
+    }
+
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email.text.trim(),
         password: password.text,
       );
-      // Login successful - the Wrapper will handle navigation
+      // User creation successful
     } catch (e) {
       // Handle different Firebase exceptions
       if (e is FirebaseAuthException) {
         switch (e.code) {
-          case 'user-not-found':
+          case 'email-already-in-use':
             setState(() {
-              errorMessage = 'No user found with this email';
-            });
-            break;
-          case 'wrong-password':
-            setState(() {
-              errorMessage = 'Incorrect password';
+              errorMessage = 'This email is already registered';
             });
             break;
           case 'invalid-email':
@@ -56,19 +63,20 @@ class _LoginState extends State<Login> {
               errorMessage = 'Email address is not valid';
             });
             break;
-          case 'user-disabled':
+          case 'weak-password':
             setState(() {
-              errorMessage = 'This account has been disabled';
+              errorMessage = 'Password is too weak';
             });
             break;
-          case 'too-many-requests':
+          case 'operation-not-allowed':
             setState(() {
-              errorMessage = 'Too many login attempts. Try again later';
+              errorMessage = 'Email/password accounts are not enabled';
             });
             break;
           default:
             setState(() {
-              errorMessage = e.message ?? 'An error occurred during login';
+              errorMessage =
+                  e.message ?? 'An error occurred during registration';
             });
         }
       } else {
@@ -83,10 +91,10 @@ class _LoginState extends State<Login> {
     }
   }
 
-  void navigateToSignUp() {
+  void navigateToLogin() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const SignUp()),
+      MaterialPageRoute(builder: (context) => const Login()),
     );
   }
 
@@ -95,6 +103,7 @@ class _LoginState extends State<Login> {
     // Clean up controllers
     email.dispose();
     password.dispose();
+    confirmPassword.dispose();
     super.dispose();
   }
 
@@ -105,8 +114,7 @@ class _LoginState extends State<Login> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login"),
-        // Using your theme's primary color for AppBar
+        title: const Text('Create Account'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -124,7 +132,7 @@ class _LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 30),
 
-                // Email field
+                // Email input
                 TextField(
                   controller: email,
                   decoration: InputDecoration(
@@ -142,7 +150,7 @@ class _LoginState extends State<Login> {
                 ),
                 const SizedBox(height: 16),
 
-                // Password field
+                // Password input
                 TextField(
                   controller: password,
                   obscureText: !isPasswordVisible,
@@ -169,8 +177,39 @@ class _LoginState extends State<Login> {
                     ),
                     labelStyle: TextStyle(color: primaryColor.withOpacity(0.8)),
                   ),
+                  textInputAction: TextInputAction.next,
+                ),
+                const SizedBox(height: 16),
+
+                // Confirm password input
+                TextField(
+                  controller: confirmPassword,
+                  obscureText: !isConfirmPasswordVisible,
+                  decoration: InputDecoration(
+                    labelText: 'Confirm Password',
+                    hintText: 'Confirm your password',
+                    prefixIcon: Icon(Icons.lock_outline, color: primaryColor),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        isConfirmPasswordVisible
+                            ? Icons.visibility
+                            : Icons.visibility_off,
+                        color: primaryColor,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isConfirmPasswordVisible = !isConfirmPasswordVisible;
+                        });
+                      },
+                    ),
+                    border: const OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: primaryColor, width: 2),
+                    ),
+                    labelStyle: TextStyle(color: primaryColor.withOpacity(0.8)),
+                  ),
                   textInputAction: TextInputAction.done,
-                  onSubmitted: (_) => signIn(),
+                  onSubmitted: (_) => signUp(),
                 ),
 
                 // Error message display
@@ -184,10 +223,10 @@ class _LoginState extends State<Login> {
                     ),
                   ),
 
-                // Login button using the primary color
+                // Sign up button
                 const SizedBox(height: 24),
                 ElevatedButton(
-                  onPressed: isLoading ? null : signIn,
+                  onPressed: isLoading ? null : signUp,
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 15),
                     backgroundColor: primaryColor,
@@ -203,18 +242,18 @@ class _LoginState extends State<Login> {
                             strokeWidth: 2,
                           ),
                         )
-                      : const Text('Login', style: TextStyle(fontSize: 16)),
+                      : const Text('Sign Up', style: TextStyle(fontSize: 16)),
                 ),
 
-                // Sign up button for new users with primary color
+                // Already have an account link
                 const SizedBox(height: 20),
                 TextButton(
-                  onPressed: navigateToSignUp,
+                  onPressed: navigateToLogin,
                   style: TextButton.styleFrom(
                     foregroundColor: primaryColor,
                   ),
                   child: const Text(
-                    'New user? Sign up',
+                    'Already registered? Log in',
                     style: TextStyle(fontSize: 16),
                   ),
                 ),

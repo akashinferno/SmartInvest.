@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:smart_invest_1/pages/stock_basics.dart';
 
 class InvestmentTopic {
   final String title;
   final String imageUrl;
-  final Widget page; // Add page property
+  final Widget page;
 
   InvestmentTopic({
     required this.title,
@@ -17,19 +18,37 @@ class HomePage extends StatelessWidget {
     InvestmentTopic(
       title: "Stock Market Basics",
       imageUrl: "https://placeholder.com/150",
-      page: StockBasicsPage(), // Create these pages separately
+      page: StockBasicsPage(),
     ),
     InvestmentTopic(
       title: "Mutual Funds",
       imageUrl: "https://placeholder.com/150",
-      page: MutualFundsPage(), //link to mutual funds page
+      page: MutualFundsPage(),
     ),
-    // ... other topics ...
+    InvestmentTopic(
+      title: "Bonds & Fixed Income Investments",
+      imageUrl: "https://placeholder.com/150",
+      page: BondsFixedIncomePage(),
+    ),
+    InvestmentTopic(
+      title: "Real Estate Investments",
+      imageUrl: "https://placeholder.com/150",
+      page: RealEstateInvestmentsPage(),
+    ),
+    InvestmentTopic(
+      title: "Gold & Commodities",
+      imageUrl: "https://placeholder.com/150",
+      page: GoldCommoditiesPage(),
+    ),
+    InvestmentTopic(
+      title: "Exchange-Traded Funds (ETFs)",
+      imageUrl: "https://placeholder.com/150",
+      page: ETFsPage(),
+    ),
   ];
 
   @override
   Widget build(BuildContext context) {
-    // Previous build method remains same until _buildTopicCard
     return Scaffold(
       appBar: AppBar(
         title: Text("SmartInvest."),
@@ -57,12 +76,33 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              Wrap(
-                spacing: 16.0,
-                runSpacing: 16.0,
-                children: topics
-                    .map((topic) => _buildTopicCard(context, topic))
-                    .toList(),
+              // Container with fixed height to prevent overflow
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(12.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade400),
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey.shade100,
+                ),
+                child: SizedBox(
+                  // Set height based on expected content size
+                  height: 3 * 200.0 + 2 * 16.0, // Example: 3 rows and spacing
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: topics.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 0.8, // Adjusted for more vertical space
+                    ),
+                    itemBuilder: (context, index) {
+                      return _buildTopicCard(context, topics[index]);
+                    },
+                  ),
+                ),
               ),
             ],
           ),
@@ -73,7 +113,6 @@ class HomePage extends StatelessWidget {
 
   Widget _buildTopicCard(BuildContext context, InvestmentTopic topic) {
     return InkWell(
-      // Makes the card clickable
       onTap: () {
         Navigator.push(
           context,
@@ -81,7 +120,6 @@ class HomePage extends StatelessWidget {
         );
       },
       child: Container(
-        width: 150,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.grey.shade300),
@@ -131,16 +169,13 @@ class HomePage extends StatelessWidget {
   }
 }
 
+// Dummy pages
 class StockBasicsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Stock Market Basics'),
-      ),
-      body: Center(
-        child: Text('Stock Market Basics Content'),
-      ),
+      appBar: AppBar(title: Text('Stock Market Basics')),
+      body: Center(child: Text('Stock Market Basics Content')),
     );
   }
 }
@@ -149,12 +184,48 @@ class MutualFundsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Mutual Funds Basics'),
-      ),
-      body: Center(
-        child: Text('Mutual Funds Basics Content'),
-      ),
+      appBar: AppBar(title: Text('Mutual Funds Basics')),
+      body: Center(child: Text('Mutual Funds Basics Content')),
+    );
+  }
+}
+
+class BondsFixedIncomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Bonds & Fixed Income Investments')),
+      body: Center(child: Text('Content for Bonds & Fixed Income Investments')),
+    );
+  }
+}
+
+class RealEstateInvestmentsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Real Estate Investments')),
+      body: Center(child: Text('Content for Real Estate Investments')),
+    );
+  }
+}
+
+class GoldCommoditiesPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Gold & Commodities')),
+      body: Center(child: Text('Content for Gold & Commodities')),
+    );
+  }
+}
+
+class ETFsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Exchange-Traded Funds (ETFs)')),
+      body: Center(child: Text('Content for Exchange-Traded Funds (ETFs)')),
     );
   }
 }

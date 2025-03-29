@@ -11,19 +11,22 @@ class Wrapper extends StatefulWidget {
 }
 
 class _WrapperState extends State<Wrapper> {
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuth.instance.authStateChanges().listen((User? user) {
+      setState(() {
+        _user = user;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return BottomNavBar(); // Add your authenticated screen here;
-          } else {
-            return Login(); // Add your unauthenticated screen here;
-          }
-        },
-      ),
+      body: _user == null ? Login() : BottomNavBar(),
     );
   }
 }
