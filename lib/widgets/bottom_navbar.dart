@@ -14,7 +14,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
 
   final List<Widget> _pages = [
     HomePage(),
-    const Placeholder(), //finbussy
+    FinbuddyPage(), //finbussy
     const Placeholder(), //marketplace
     const ProfilePage(), //userprofile
   ];
