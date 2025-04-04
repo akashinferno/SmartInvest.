@@ -53,6 +53,35 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text("SmartInvest."),
         centerTitle: false,
+        actions: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: TextButton(
+              onPressed: () {
+                // No action needed
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                side: BorderSide(color: Colors.white, width: 1), // Added border
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(8.0), // Optional: Rounded corners
+                ),
+              ),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    "English",
+                  ),
+                  SizedBox(width: 4),
+                  Text(
+                    "🇬🇧", // "En" symbol (using the UK flag emoji as a common representation)
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(

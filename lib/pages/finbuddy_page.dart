@@ -21,25 +21,37 @@ class IntroPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Meet Finbuddy, your Personal AI Finance Assistant",
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ChatbotPage()),
-                );
-              },
-              child: Text("Get Started"),
-            ),
-          ],
+        child: Padding(
+          // Added Padding for better spacing on different screens
+          padding: const EdgeInsets.all(30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Meet Finbuddy, your Personal AI Finance Assistant",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize:
+                      24, // Slightly increased font size for better emphasis
+                  fontWeight: FontWeight.bold,
+                  height: 1.3, // Added line height for better readability
+                ),
+                maxLines:
+                    3, // Added maxLines to prevent overflow on smaller screens
+                overflow: TextOverflow.ellipsis, // Added ellipsis for overflow
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ChatbotPage()),
+                  );
+                },
+                child: Text("Get Started"),
+              ),
+            ],
+          ),
         ),
       ),
     );
