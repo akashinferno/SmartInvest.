@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:smart_invest_1/pages/stock_basics.dart';
 
 class InvestmentTopic {
   final String title;
-  final String imageUrl;
+  final String imageUrl; // Not used for icons, but keep it for consistency
   final Widget page;
 
   InvestmentTopic({
@@ -17,38 +16,41 @@ class HomePage extends StatelessWidget {
   final List<InvestmentTopic> topics = [
     InvestmentTopic(
       title: "Stock Market Basics",
-      imageUrl: "https://placeholder.com/150",
+      imageUrl: "", // Not used
       page: StockBasicsPage(),
     ),
     InvestmentTopic(
       title: "Mutual Funds",
-      imageUrl: "https://placeholder.com/150",
+      imageUrl: "", // Not used
       page: MutualFundsPage(),
     ),
     InvestmentTopic(
       title: "Bonds & Fixed Income Investments",
-      imageUrl: "https://placeholder.com/150",
+      imageUrl: "", // Not used
       page: BondsFixedIncomePage(),
     ),
     InvestmentTopic(
       title: "Real Estate Investments",
-      imageUrl: "https://placeholder.com/150",
+      imageUrl: "", // Not used
       page: RealEstateInvestmentsPage(),
     ),
     InvestmentTopic(
       title: "Gold & Commodities",
-      imageUrl: "https://placeholder.com/150",
+      imageUrl: "", // Not used
       page: GoldCommoditiesPage(),
     ),
     InvestmentTopic(
       title: "Exchange-Traded Funds (ETFs)",
-      imageUrl: "https://placeholder.com/150",
+      imageUrl: "", // Not used
       page: ETFsPage(),
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
+    // Get the primary color from the app's theme
+    final Color primaryColor = Theme.of(context).primaryColor;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("SmartInvest."),
@@ -62,10 +64,9 @@ class HomePage extends StatelessWidget {
               },
               style: TextButton.styleFrom(
                 foregroundColor: Colors.white,
-                side: BorderSide(color: Colors.white, width: 1), // Added border
+                side: BorderSide(color: Colors.white, width: 1),
                 shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(8.0), // Optional: Rounded corners
+                  borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
               child: Row(
@@ -75,7 +76,7 @@ class HomePage extends StatelessWidget {
                   ),
                   SizedBox(width: 4),
                   Text(
-                    "🇬🇧", // "En" symbol (using the UK flag emoji as a common representation)
+                    "🇬🇧",
                   ),
                 ],
               ),
@@ -105,7 +106,6 @@ class HomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              // Container with fixed height to prevent overflow
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(12.0),
@@ -115,8 +115,7 @@ class HomePage extends StatelessWidget {
                   color: Colors.grey.shade100,
                 ),
                 child: SizedBox(
-                  // Set height based on expected content size
-                  height: 3 * 200.0 + 2 * 16.0, // Example: 3 rows and spacing
+                  height: 3 * 200.0 + 2 * 16.0,
                   child: GridView.builder(
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
@@ -125,10 +124,11 @@ class HomePage extends StatelessWidget {
                       crossAxisCount: 2,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
-                      childAspectRatio: 0.8, // Adjusted for more vertical space
+                      childAspectRatio: 0.8,
                     ),
                     itemBuilder: (context, index) {
-                      return _buildTopicCard(context, topics[index]);
+                      return _buildTopicCard(
+                          context, topics[index], primaryColor);
                     },
                   ),
                 ),
@@ -140,7 +140,8 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _buildTopicCard(BuildContext context, InvestmentTopic topic) {
+  Widget _buildTopicCard(
+      BuildContext context, InvestmentTopic topic, Color primaryColor) {
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -168,14 +169,14 @@ class HomePage extends StatelessWidget {
             Container(
               height: 100,
               decoration: BoxDecoration(
-                color: Colors.grey.shade200,
+                color: primaryColor, // Use the primary color here
                 borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
               ),
               child: Center(
                 child: Icon(
-                  Icons.image,
-                  size: 40,
-                  color: Colors.grey.shade400,
+                  _getIconForTopic(topic.title),
+                  size: 60,
+                  color: Colors.white, // Ensure the icon color contrasts
                 ),
               ),
             ),
@@ -196,18 +197,37 @@ class HomePage extends StatelessWidget {
       ),
     );
   }
+
+  IconData _getIconForTopic(String title) {
+    switch (title) {
+      case "Stock Market Basics":
+        return Icons.show_chart;
+      case "Mutual Funds":
+        return Icons.account_balance;
+      case "Bonds & Fixed Income Investments":
+        return Icons.attach_money;
+      case "Real Estate Investments":
+        return Icons.home;
+      case "Gold & Commodities":
+        return Icons.auto_awesome;
+      case "Exchange-Traded Funds (ETFs)":
+        return Icons.stacked_line_chart;
+      default:
+        return Icons.image;
+    }
+  }
 }
 
 // Dummy pages
-// class StockBasicsPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: Text('Stock Market Basics')),
-//       body: Center(child: Text('Stock Market Basics Content')),
-//     );
-//   }
-// }
+class StockBasicsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Stock Market Basics')),
+      body: Center(child: Text('Stock Market Basics Content')),
+    );
+  }
+}
 
 class MutualFundsPage extends StatelessWidget {
   @override
