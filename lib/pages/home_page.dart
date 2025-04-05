@@ -12,43 +12,49 @@ class InvestmentTopic {
   });
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   final List<InvestmentTopic> topics = [
     InvestmentTopic(
       title: "Stock Market Basics",
-      imageUrl: "", // Not used
+      imageUrl: "",
       page: StockBasicsPage(),
     ),
     InvestmentTopic(
       title: "Mutual Funds",
-      imageUrl: "", // Not used
+      imageUrl: "",
       page: MutualFundsPage(),
     ),
     InvestmentTopic(
       title: "Bonds & Fixed Income Investments",
-      imageUrl: "", // Not used
+      imageUrl: "",
       page: BondsFixedIncomePage(),
     ),
     InvestmentTopic(
       title: "Real Estate Investments",
-      imageUrl: "", // Not used
+      imageUrl: "",
       page: RealEstateInvestmentsPage(),
     ),
     InvestmentTopic(
       title: "Gold & Commodities",
-      imageUrl: "", // Not used
+      imageUrl: "",
       page: GoldCommoditiesPage(),
     ),
     InvestmentTopic(
       title: "Exchange-Traded Funds (ETFs)",
-      imageUrl: "", // Not used
+      imageUrl: "",
       page: ETFsPage(),
     ),
   ];
 
+  String _selectedLanguage = "English";
+
   @override
   Widget build(BuildContext context) {
-    // Get the primary color from the app's theme
     final Color primaryColor = Theme.of(context).primaryColor;
 
     return Scaffold(
@@ -58,27 +64,63 @@ class HomePage extends StatelessWidget {
         actions: <Widget>[
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
-            child: TextButton(
-              onPressed: () {
-                // No action needed
+            child: PopupMenuButton<String>(
+              onSelected: (String language) {
+                setState(() {
+                  _selectedLanguage = language;
+                  //  Implement your language switching logic here.
+                });
               },
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.white,
-                side: BorderSide(color: Colors.white, width: 1),
-                shape: RoundedRectangleBorder(
+              itemBuilder: (BuildContext context) {
+                return [
+                  const PopupMenuItem<String>(
+                    value: "English",
+                    child: Text("English"),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: "Tamil",
+                    child: Text("Tamil"),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: "Telugu",
+                    child: Text("Telugu"),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: "Malayalam",
+                    child: Text("Malayalam"),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: "Kannada",
+                    child: Text("Kannada"),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: "Hindi",
+                    child: Text("Hindi"),
+                  ),
+                ];
+              },
+              child: Container(
+                // Added Container for styling
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8.0),
+                  border: Border.all(color: Colors.white, width: 1),
                 ),
-              ),
-              child: Row(
-                children: <Widget>[
-                  Text(
-                    "English",
-                  ),
-                  SizedBox(width: 4),
-                  Text(
-                    "🇬🇧",
-                  ),
-                ],
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0, vertical: 4.0), // Added padding
+                child: Row(
+                  children: <Widget>[
+                    Text(
+                      _selectedLanguage,
+                      style: const TextStyle(
+                          color: Colors.white), // Added text color
+                    ),
+                    const SizedBox(width: 4),
+                    const Text(
+                      "🇮🇳",
+                      style: TextStyle(color: Colors.white), // Added text color
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -169,14 +211,14 @@ class HomePage extends StatelessWidget {
             Container(
               height: 100,
               decoration: BoxDecoration(
-                color: primaryColor, // Use the primary color here
+                color: primaryColor,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
               ),
               child: Center(
                 child: Icon(
                   _getIconForTopic(topic.title),
                   size: 60,
-                  color: Colors.white, // Ensure the icon color contrasts
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -218,7 +260,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-// Dummy pages
+// Dummy pages (rest of your dummy pages code)
 class StockBasicsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

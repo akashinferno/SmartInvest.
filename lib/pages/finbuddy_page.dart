@@ -22,7 +22,6 @@ class IntroPage extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Padding(
-          // Added Padding for better spacing on different screens
           padding: const EdgeInsets.all(30.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -31,14 +30,12 @@ class IntroPage extends StatelessWidget {
                 "Meet Finbuddy, your Personal AI Finance Assistant",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize:
-                      24, // Slightly increased font size for better emphasis
+                  fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  height: 1.3, // Added line height for better readability
+                  height: 1.3,
                 ),
-                maxLines:
-                    3, // Added maxLines to prevent overflow on smaller screens
-                overflow: TextOverflow.ellipsis, // Added ellipsis for overflow
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
               ),
               SizedBox(height: 20),
               ElevatedButton(
@@ -127,9 +124,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
     String initialPrompt =
         "You are an AI finance assistant named Finbuddy.(give short greeting) Your purpose is to help with questions specifically related to finance and investing. Please explain concepts and provide information in simple, easy-to-understand language. Do not answer questions that are outside the topics of finance and investing.";
     getResponse(initialPrompt);
-    // Add the initial greeting message immediately
-    // chatMessages.add(
-    //     "Finbuddy:\nHi! I'm Finbuddy, your personal AI finance assistant. How can I help you today?");
   }
 
   Widget buildChatBubble(String message) {
@@ -138,7 +132,9 @@ class _ChatbotPageState extends State<ChatbotPage> {
       margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 14),
       decoration: BoxDecoration(
-        color: isUser ? Colors.grey[300] : Colors.purple[200],
+        color: isUser
+            ? Colors.grey[300]
+            : Colors.purple[400], // Changed to purple[400] for darker shade
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
