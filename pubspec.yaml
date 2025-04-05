@@ -30,6 +30,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  video_player: ^2.8.2
+  # youtube_player_flutter: ^8.1.2 # Use the latest version
+  # shared_preferences: ^2.0.15 # Use the latest version
 
   http: ^0.13.6
 
@@ -59,8 +62,10 @@ flutter:
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
+
   uses-material-design: true
   assets:
+    - assets/stock_intro.mp4
     - assets/images/
     - .env
 

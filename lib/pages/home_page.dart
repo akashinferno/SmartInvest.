@@ -199,15 +199,15 @@ class HomePage extends StatelessWidget {
 }
 
 // Dummy pages
-class StockBasicsPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Stock Market Basics')),
-      body: Center(child: Text('Stock Market Basics Content')),
-    );
-  }
-}
+// class StockBasicsPage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: Text('Stock Market Basics')),
+//       body: Center(child: Text('Stock Market Basics Content')),
+//     );
+//   }
+// }
 
 class MutualFundsPage extends StatelessWidget {
   @override
