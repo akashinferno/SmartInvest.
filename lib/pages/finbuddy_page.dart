@@ -63,12 +63,8 @@ class ChatbotPage extends StatefulWidget {
 class _ChatbotPageState extends State<ChatbotPage> {
   final TextEditingController _controller = TextEditingController();
   List<String> chatMessages = [];
-  bool _isFirstResponse = true; // Track if it's the first response from the bot
-
-  // Hardcoded model: always use gemini-1.5-pro.
-  final String selectedModel = "gemini-1.5-pro";
-
-  // Replace with your actual API key.
+  bool _isFirstResponse = true;
+  final String selectedModel = "gemini-1.5-flash";
   final String apiKey = dotenv.env['API_KEY'] ?? '';
 
   Future<void> getResponse(String userMessage) async {
@@ -89,7 +85,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
         ]
       }),
     );
-    if (!mounted) return; // Check again after API response
+    if (!mounted) return;
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
@@ -97,16 +93,15 @@ class _ChatbotPageState extends State<ChatbotPage> {
               ?['text'] ??
           "No reply found";
 
-      // Check if it's the first response and if it's a generic acknowledgement
       if (_isFirstResponse &&
           (finbuddyReply.toLowerCase().contains("understood") ||
               finbuddyReply.toLowerCase().contains("i'm ready") ||
               finbuddyReply.toLowerCase().contains("will do"))) {
-        _isFirstResponse = false; // Skip adding this initial acknowledgement
+        _isFirstResponse = false;
       } else {
         setState(() {
           chatMessages.add("Finbuddy: \n " + finbuddyReply);
-          _isFirstResponse = false; // Next responses are not the first
+          _isFirstResponse = false;
         });
       }
     } else {
@@ -120,7 +115,6 @@ class _ChatbotPageState extends State<ChatbotPage> {
   @override
   void initState() {
     super.initState();
-    // Send the initial refined prompt
     String initialPrompt =
         "You are an AI finance assistant named Finbuddy.(give short greeting) Your purpose is to help with questions specifically related to finance and investing. Please explain concepts and provide information in simple, easy-to-understand language. Do not answer questions that are outside the topics of finance and investing.";
     getResponse(initialPrompt);
@@ -132,9 +126,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
       margin: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 14),
       decoration: BoxDecoration(
-        color: isUser
-            ? Colors.grey[300]
-            : Colors.purple[400], // Changed to purple[400] for darker shade
+        color: isUser ? Colors.grey[300] : Colors.purple[400],
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(16),
           topRight: Radius.circular(16),
